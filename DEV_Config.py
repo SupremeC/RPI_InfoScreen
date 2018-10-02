@@ -40,7 +40,6 @@ GPIO.setup(OLED_RST_PIN, GPIO.OUT)
 GPIO.setup(OLED_DC_PIN, GPIO.OUT)
 GPIO.setup(OLED_CS_PIN, GPIO.OUT)
 
-print "Hello from DEV_Config.py"
 
 USE_SPI_4W = 1
 USE_I2C = 0

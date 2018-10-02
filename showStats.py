@@ -1,13 +1,21 @@
  # -*- coding:UTF-8 -*-
- ##
+ #
  # | file       :   showStats.py
  # | version    :   V1.0
  # | date       :   2018-10-01
- # | function   :   Show statistics on Waveshare 1.5inch OLED 
+ # | function   :   Show statistics on Waveshare 1.5inch OLED
+ # | 				- Listens on MQTT topic
+ # | 					+ home/basement/serverroom/motionsensor
+ # | 				- Publishes MQTT topics
+ # | 					+ home/basement/serverroom/rpiA/cputemp
+ # | 					+ home/basement/serverroom/rpiA/cpuload
+ # | 					+ home/basement/serverroom/rpiA/alive
+ # | 					+ home/basement/serverroom/rpiA/diskusage
  #					
  #
- # Requires psUtil.
- # Install: sudo apt-get python-psutil
+ # Requires psUtil.   Install: 	sudo apt-get python-psutil
+ # Requires pahoMQTT. Install:	sudo apt install python-pip
+ #								pip install paho-mqtt
  #
  # INFO:
  # Collects various information about the system and displays the info on the screen
@@ -16,15 +24,20 @@
 
 
 
+# Logging
+import logging
+import logging.config
 import commands
 import os
 import psutil
 import platform
 import datetime
 import time
+# MQTT
+import paho.mqtt.client as paho
 # RPI
 import RPi.GPIO as GPIO
-# specific to Oled screen
+# specific to OLED screen
 import DEV_Config
 import OLED_Driver
 import Image
@@ -32,55 +45,112 @@ import ImageDraw
 import ImageFont
 import ImageColor
 
+
+
+# Global
+LOGGING_CONFIG_FILE = "logging_config.ini"
+mqttclient = None
+OLED = None
+showOnScreen = None
+MQTT_SUBSCRIBE_TOPIC = "home/basement/serverroom/motionsensor"
+
+
+
+# Logging setup
+logging.config.fileConfig(fname=LOGGING_CONFIG_FILE, disable_existing_loggers=True)
+logger = logging.getLogger()
+
+
 try:
 	def main():
-		print "start"
-		#input("vad heter du")
-		OLED = OLED_Driver.OLED()
+		logging.addLevelName(100, 'START')
+		logging.log(100, "============================")
+		logging.log(100, "STARTING UP")
 		
-		# print "************Init OLED************"
+		
+		logger.info("Initilize OLED screen")
+		global OLED
+		global showOnScreen
+		showOnScreen = False
+		OLED = OLED_Driver.OLED()
 		OLED_ScanDir = OLED_Driver.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
 		OLED.OLED_Init(OLED_ScanDir)
 		OLED.OLED_Clear()
 		DEV_Config.Driver_Delay_ms(500)
 
-		# print "*****Setting up display area*****"
+		global mqttclient
+		mqttclient = paho.Client(client_id="RPI-A_OLEDScreen", clean_session=False, userdata=None)
+		mqttclient.enable_logger(logger)
+		mqttclient.on_connect = on_connect
+		mqttclient.on_subscribe = on_subscribe
+		mqttclient.on_message = on_message
+		mqttclient.connect("192.168.1.170", 1883, 60)
+		mqttclient.loop_start()
+
+		logger.info("Setting up OLED display area")
 		DEV_Config.Driver_Delay_ms(500)
 		image = Image.new("L", (OLED.OLED_Dis_Column, OLED.OLED_Dis_Page), 0)# grayscale (luminance)
 		draw = ImageDraw.Draw(image)
 
-		# print "get these values only once since they will not change"
+		logger.info("Fetch platform info once@startup")
 		os, name, version, _, _, _ = platform.uname()
 		boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
 		macadress = getMAC('eth0')
+		logging.log(100, "OS: " + os)
+		logging.log(100, "Device name: " + name)
+		logging.log(100, "version: " + version)
+		logging.log(100, "Logging config file: " + LOGGING_CONFIG_FILE)
+		logging.log(100, "============================")
+		
 		
 		while(1):
-			updateDisplay(os, name, version, boot_time, macadress)
-			time.sleep(2)
+			updateDisplay(os, name, version, boot_time, macadress, showOnScreen)
+			time.sleep(2) # seconds
 
-	def updateDisplay(os, name, version, boot_time, macadress):
-		#update values every loop
-		currenttime = datetime.datetime.now()
-		cpupercent = str(psutil.cpu_percent()) + "%"	# first run gives a wrong value due to CPU load while initializing PSUTIL
-		cputemp = getCPUtemperature()
-		
-		#update every hour
-		if currenttime.minute % 59:
-			uptime = currenttime - boot_time
-			ip_adress = commands.getoutput('hostname -I')
 
-		if currenttime.hour % 23:
-			#update every day
-			fstotal, fsused, fsfree, fspercent = psutil.disk_usage("/")
-		
-		
-		print os, name, version
-		print("Local IP adress: " + ip_adress)
-		print("MAC: " + macadress)
-		print "CPU temp:", cputemp
-		print "CPU %:", cpupercent
-		print sizeof_fmt(fsused), "of", sizeof_fmt(fstotal), "(", fspercent, "%)"
-		print "uptime:", friendlyTimeDelta(boot_time, currenttime)
+	def on_connect(client, userdata, flags, rc):
+		logger.info("CONNACK received with code %d." % (rc))
+		client.subscribe(MQTT_SUBSCRIBE_TOPIC, qos=1)
+	def on_subscribe(client, userdata, mid, granted_qos):
+		logger.info("Subscribed: "+str(mid)+" "+str(granted_qos))
+	def on_message(client, userdata, msg):
+		global showOnScreen
+		logger.info(msg.topic+" "+str(msg.qos)+" "+str(msg.payload)) 
+		if msg.topic == MQTT_SUBSCRIBE_TOPIC and msg.payload=="motion":
+			showOnScreen = True
+		else:
+			showOnScreen = False
+
+
+	def updateDisplay(os, name, version, boot_time, macadress, showOnScreen):
+		if showOnScreen == False:
+			return
+		else:
+			#update values every loop
+			currenttime = datetime.datetime.now()
+			cpupercent = str(psutil.cpu_percent()) + "%"	# first run gives a wrong value due to CPU load while initializing PSUTIL
+			cputemp = getCPUtemperature()
+			
+			#update every hour
+			if currenttime.minute % 59:
+				uptime = currenttime - boot_time
+				ip_adress = commands.getoutput('hostname -I')
+
+			if currenttime.hour % 23:
+				#update every day
+				fstotal, fsused, fsfree, fspercent = psutil.disk_usage("/")
+			
+			
+			print os, name, version
+			print("Local IP adress: " + ip_adress)
+			print("MAC: " + macadress)
+			print "CPU temp:", cputemp
+			print "CPU %:", cpupercent
+			print sizeof_fmt(fsused), "of", sizeof_fmt(fstotal), "(", fspercent, "%)"
+			print "uptime:", friendlyTimeDelta(boot_time, currenttime)
+			logger.info("Done updating OLED screen")
+
+
 
 
 	# Return friendly TimeDelta string
@@ -132,9 +202,10 @@ try:
 		main()
 
 except KeyboardInterrupt:
-	print "exiting program"
+	logger.info("exiting program")
 except:
-	print("exception occured")
+	logger.error('Exception occurred', exc_info=True)
 	raise
 finally:  
    GPIO.cleanup() # this ensures a clean exit
+   mqttclient.loop_stop()
