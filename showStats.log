@@ -1,0 +1,79 @@
+2018-10-05 09:38:05,427	__main__	<module>	INFO	testing logger KalleBanan
+2018-10-05 09:38:05,427	systemwatcher	__init__	INFO	testing logger from module KalleBanan
+2018-10-05 09:50:33,108	__main__	<module>	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 47, in <module>
+    main()
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 36, in main
+    watcher = systemwatcher.SystemWatcher(1)
+  File "C:\Users\DBE\PycharmProjects\testingEvents\systemwatcher.py", line 28, in __init__
+    logger.info("SystemWatcher Init(delay=%, start_monitor=%)" % _update_delay, start_monitor)
+ValueError: unsupported format character ',' (0x2c) at index 26
+2018-10-07 18:48:01,553	__main__	<module>	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 79, in <module>
+    main()
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 43, in main
+    mqtt_setup()
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 54, in mqtt_setup
+    mqtt_client.connect(MQTT_BROKER[0], MQTT_BROKER[1], MQTT_BROKER[2])
+  File "C:\Python27\lib\site-packages\paho\mqtt\client.py", line 839, in connect
+    return self.reconnect()
+  File "C:\Python27\lib\site-packages\paho\mqtt\client.py", line 962, in reconnect
+    sock = socket.create_connection((self._host, self._port), source_address=(self._bind_address, 0))
+  File "C:\Python27\lib\socket.py", line 575, in create_connection
+    raise err
+error: [Errno 10065] A socket operation was attempted to an unreachable host
+2018-10-09 14:56:08,940	__main__	<module>	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 80, in <module>
+    main()
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 35, in main
+    oled_screen = oledmanager.OledManager()
+  File "C:\Users\DBE\PycharmProjects\testingEvents\oledmanager.py", line 20, in __init__
+    self._OLED_ScanDir = OLED_Driver.SCAN_DIR_DFT  # SCAN_DIR_DFT = D2U_L2R
+NameError: global name 'OLED_Driver' is not defined
+2018-10-09 14:57:34,778	__main__	<module>	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 80, in <module>
+    main()
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 35, in main
+    oled_screen = oledmanager.OledManager()
+  File "C:\Users\DBE\PycharmProjects\testingEvents\oledmanager.py", line 20, in __init__
+    self._OLED_ScanDir = OLED_Driver.SCAN_DIR_DFT  # SCAN_DIR_DFT = D2U_L2R
+NameError: global name 'OLED_Driver' is not defined
+2018-10-10 08:28:33,973	__main__	<module>	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 81, in <module>
+    main()
+  File "C:/Users/DBE/PycharmProjects/testingEvents/testcode.py", line 35, in main
+    oled_screen = oledmanager.OledManager(1,["rpi_bw_mono.bmp", "rpilogo.bmp"])
+TypeError: __init__() should return None, not 'OledManager'
+2018-10-11 12:43:43,309	systemwatcher	internet_connected	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "/home/pi/projects/displayApp/systemwatcher.py", line 179, in internet_connected
+    socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+  File "/usr/lib/python2.7/socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+TypeError: coercing to Unicode: need string or buffer, SystemWatcher found
+2018-10-11 12:43:43,315	systemwatcher	internet_connected	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "/home/pi/projects/displayApp/systemwatcher.py", line 179, in internet_connected
+    socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+  File "/usr/lib/python2.7/socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+TypeError: coercing to Unicode: need string or buffer, SystemWatcher found
+2018-10-11 12:43:48,340	systemwatcher	internet_connected	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "/home/pi/projects/displayApp/systemwatcher.py", line 179, in internet_connected
+    socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+  File "/usr/lib/python2.7/socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+TypeError: coercing to Unicode: need string or buffer, SystemWatcher found
+2018-10-11 12:43:48,343	systemwatcher	internet_connected	ERROR	Exception occurred
+Traceback (most recent call last):
+  File "/home/pi/projects/displayApp/systemwatcher.py", line 179, in internet_connected
+    socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+  File "/usr/lib/python2.7/socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+TypeError: coercing to Unicode: need string or buffer, SystemWatcher found
