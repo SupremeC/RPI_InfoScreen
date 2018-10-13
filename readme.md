@@ -2,7 +2,7 @@
 This is a small application that displays statistics and status iformation to
 a Waveshare 1.5" OLED screen connected to Raspberry Pi 3 via SPI.
 
-pic1 pic2 pic3 pic4
+![img1](https://i.imgur.com/8Mzzr6Z.png) ![img2](https://i.imgur.com/9evTFRR.png)  ![img3](https://i.imgur.com/FHbf6Ug.png)   ![img4](https://i.imgur.com/dxmdZjk.png)
 
 ### Prerequisites
  + Raspberry Pi
