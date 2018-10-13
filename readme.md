@@ -2,14 +2,16 @@
 This is a small application that displays statistics and status iformation to
 a Waveshare 1.5" OLED screen connected to Raspberry Pi 3 via SPI.
 
+pic1 pic2 pic3 pic4
+
 ### Prerequisites
  + Raspberry Pi
- + Waveshare 1.5 inch OLED display (grayscale)
+ + [Waveshare 1.5 inch OLED display](https://www.waveshare.com/1.5inch-OLED-Module.htm) (grayscale)
 
  
  ### Wiring
  + Wire up OLED display according to the SPI documentation for the Waveshare display.
- + Power lED (red) is wired via a resistor to 5V.
+ + Power LED (red) is wired via a resistor to 5V.
  + System LED (green) is wired to BCM PIN XX.
  + Activity LED (orange) is wired to BCM PIN XX.
 
@@ -20,12 +22,13 @@ a Waveshare 1.5" OLED screen connected to Raspberry Pi 3 via SPI.
 
 
 ### Installation part 1
- + Enable SPI or I2C bus on the Raspberry depending on how you connect the display
- ++ sudo raspi-config
- ++ interfacing options -> Enable SPI or I2C
- + Install psutil
- + Install Paho MQTT
- + PILLOW
+ * Start with a freshly updated system `sudo apt-get update`
+ * Enable SPI or I2C bus on the Raspberry depending on how you connect the display
+   * `sudo raspi-config`
+   * interfacing options -> Enable SPI or I2C
+ * Install psutil `pip install psutil`
+ * Install Paho MQTT `pip install paho-mqtt`
+ * PILLOW `sudo apt-get install python-pil`
 
 ### Installation this application
 + TODO - as soon as I get some free time :)
