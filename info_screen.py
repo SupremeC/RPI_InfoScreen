@@ -1,6 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+#
+# | file       :   info_screen.py
+# | version    :   V1.0
+# | date       :   2018-10-15
+# | function   :   Show statistics on Waveshare 1.5inch OLED
+# |					To preserve OLED screen life the display is turned off unless
+# |					motion is detected (via MQTT).
+# |
+# | Learn more at https://github.com/SupremeC/RPI_InfoScreen/
+#
+# Requires psUtil.   Install: 	sudo apt-get python-psutil
+# Requires pahoMQTT. Install:	sudo apt install python-pip
+#								pip install paho-mqtt
+#
+# INFO:
+# Collects various information about the system and displays the info on the screen
+#
 import time
 import logging.config
 import systemwatcher
@@ -37,7 +53,7 @@ try:
 
         # Init OLED-screen and show splash image.
         global oled_screen
-        oled_screen = oledmanager.OledManager(5, ["rpi_bw_mono.bmp", "rpilogo.bmp"])
+        oled_screen = oledmanager.OledManager(5, ["icons/rpi_bw_mono.bmp", "icons/rpilogo.bmp"])
 
         # monitor interesting key data about the system.
         # Default monitor state is OFF. (set to ON when "motion" is detected)
