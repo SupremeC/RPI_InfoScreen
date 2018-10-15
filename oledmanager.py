@@ -116,17 +116,6 @@ class OledManager(object):
             time.sleep(duration)
             self.clear_oled()
 
-    def get_font_size(self, font_name, text, max_width):
-        font_size = 8
-        font = ImageFont.truetype(font_name, font_size)
-        while font.getsize(text)[0] < max_width:
-            # iterate until the text size is just larger than the criteria
-            font_size += 1
-            font = ImageFont.truetype(font_name, font_size)
-        # step back to be within bounds
-        self.font_header_size = font_size - 1
-        return ImageFont.truetype(font_name, font_size - 1), self.font_header_size
-
     def get_host_image(self):
         if self.img_host is None:
             self.img_host = Image.new("L", (128, 128), 0)  # blank black image
@@ -166,13 +155,12 @@ class OledManager(object):
     def get_cpu_image(self):
         if self.img_cpu is None:
             self.img_cpu = Image.new("L", (128, 128), 0)  # blank black image
-            drawing = ImageDraw.Draw(self.img_cpu)
-            icon = Image.open('temp.bmp', 'r')
+            icon = Image.open('icons/temp.bmp', 'r')
             icon_h = icon.size[1]
             h_offset = 0
             if icon_h < 128:
                 h_offset = (128 - icon_h) / 2
-                self.img_cpu.paste(icon, (1, h_offset))
+            self.img_cpu.paste(icon, (1, h_offset))
         
         drawing = ImageDraw.Draw(self.img_cpu)
         drawing.rectangle([(36, 42), (128, 73)], fill=0, outline=0, width=2)
@@ -185,8 +173,7 @@ class OledManager(object):
     def get_disk_image(self):
         if self.img_disk is None:
             self.img_disk = Image.new("L", (128, 128), 0)  # blank black image
-            drawing = ImageDraw.Draw(self.img_disk)
-            icon = Image.open('sdcard.bmp', 'r')
+            icon = Image.open('icons/sdcard.bmp', 'r')
             icon_h = icon.size[1]
             h_offset = 0
             if icon_h < 128:
