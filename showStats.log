@@ -77,3 +77,31 @@ Traceback (most recent call last):
   File "/usr/lib/python2.7/socket.py", line 228, in meth
     return getattr(self._sock,name)(*args)
 TypeError: coercing to Unicode: need string or buffer, SystemWatcher found
+2018-10-13 14:32:41,637	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:09,808	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:10,814	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:12,273	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:13,279	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:14,703	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:15,709	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:16,715	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:17,722	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:18,728	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:19,735	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:20,744	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:21,751	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:22,761	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:23,770	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:24,777	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:25,783	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:26,789	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:27,795	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:28,802	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:29,809	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:30,817	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:31,824	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:32,830	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:33,837	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:34,844	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:35,850	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found
+2018-10-13 14:33:36,857	__main__	_easy_log	ERROR	Caught exception in on_disconnect: sequence item 1: expected string, int found

@@ -7,22 +7,21 @@ import systemwatcher
 import oledmanager
 import paho.mqtt.client as paho
 import RPi.GPIO as GPIO
-from pympler.tracker import SummaryTracker
-tracker = SummaryTracker()
+
 
 # CONSTANTS
 LOGGING_CONFIG_FILE = "logging_config.ini"
 MQTT_SUBSCRIBE_TOPIC = "home/basement/serverroom/motionsensor"
 MQTT_BROKER = ("192.168.1.170", 1883, 60)  # (host, port, timeout)
 REFRESH_INTERVAL = 2  # seconds
-SYSTEM_RUNNING_LED_PIN = "fake"
+SYSTEM_RUNNING_LED_PIN = 26  # BCM PIN
+SYSTEM_ACTIVITY_LED_PIN = 6  # BCM PIN
 
 
 # GLOBALS
 mqtt_client = None
 watcher = None
 oled_screen = None
-main_loop_run = True  # Set to False to terminate program
 
 
 # Logging setup
@@ -50,10 +49,11 @@ try:
         # On "motion" detected the screen will display.
         mqtt_setup()
 
-        # Loop until someone says stop!
-        global main_loop_run
-        while main_loop_run:
-            time.sleep(30)
+        # Keep alive until we receive a signal.
+		# The signal most likely to be received is SIGTERM, but as for now 
+		# we dont really care wich one it is.
+		# Cleanup will happen in the "FINALLY" block.
+		signal.pause()
 
 
     def mqtt_setup():
@@ -101,15 +101,11 @@ try:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         if state_on:
-            GPIO.setup(6, GPIO.OUT)
-            GPIO.output(6, GPIO.HIGH)
-            GPIO.setup(26, GPIO.OUT)
-            GPIO.output(26, GPIO.HIGH)
+            GPIO.setup(SYSTEM_RUNNING_LED_PIN, GPIO.OUT)  # green LED
+            GPIO.output(SYSTEM_RUNNING_LED_PIN, GPIO.HIGH)
         else:
-            GPIO.setup(6, GPIO.OUT)
-            GPIO.output(6, GPIO.LOW)
-            GPIO.setup(26, GPIO.OUT)
-            GPIO.output(26, GPIO.HIGH)
+            GPIO.setup(SYSTEM_RUNNING_LED_PIN, GPIO.OUT)  # green LED
+            GPIO.output(SYSTEM_RUNNING_LED_PIN, GPIO.LOW)
 
     if __name__ == "__main__":
         main()
@@ -121,7 +117,7 @@ except:
     raise
 finally:
     # stop watcher
-    logger.info("finally the end")
+    logger.info("starting cleanup...")
     watcher.stop_monitoring()
     del watcher
 
@@ -132,10 +128,9 @@ finally:
     del mqtt_client
 
     # turn off OLED screen and kill background thread.
+	system_running_led(False)
     global oled_screen
     oled_screen.close()
     oled_screen.clear_oled()
-    del oled_screen
     GPIO.cleanup()  # TODO enable this ensures a clean exit
-    time.sleep(2)  # for debugging purposes. (allows console output to complete from child threads. Can be removed.
-    tracker.print_diff()
+    logger.info("Done cleaning. Exiting")

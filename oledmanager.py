@@ -140,12 +140,10 @@ class OledManager(object):
             drawing.text((20, 66), self._data.host.os, font=self.font_std, fill=255)
             drawing.text((10, 84), "UPTIME:", font=self.font_std, fill=255)
             drawing.text((20, 100), self._data.host.up_time, font=self.font_std, fill=255)
-            return self.img_host
-        else:
-            drawing = ImageDraw.Draw(self.img_host)
-            drawing.rectangle([(20, 100), (128, 128)], fill=0, outline=0, width=2)
-            drawing.text((20, 100), self._data.host.up_time, font=self.font_std, fill=255)
-            return self.img_host
+        drawing = ImageDraw.Draw(self.img_host)
+        drawing.rectangle([(20, 100), (128, 128)], fill=0, outline=0, width=2)
+        drawing.text((20, 100), self._data.host.up_time, font=self.font_std, fill=255)
+        return self.img_host
 
     def get_network_image(self):
         if self.img_network is None:
