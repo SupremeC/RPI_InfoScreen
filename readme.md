@@ -2,6 +2,7 @@
 This is a small application that displays statistics and status iformation to
 a Waveshare 1.5" OLED screen connected to Raspberry Pi 3 via SPI.
 Developed with Python 2 but it should run on Python3 as well.
+
 ![img1](https://i.imgur.com/8Mzzr6Z.png) ![img2](https://i.imgur.com/9evTFRR.png)  ![img3](https://i.imgur.com/FHbf6Ug.png)   ![img4](https://i.imgur.com/dxmdZjk.png)
 
 ### Prerequisites
