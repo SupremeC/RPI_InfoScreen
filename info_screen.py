@@ -12,12 +12,14 @@
 #
 # Requires psUtil.   Install: 	sudo apt-get python-psutil
 # Requires pahoMQTT. Install:	sudo apt install python-pip
-#								pip install paho-mqtt
+# 								pip install paho-mqtt
 #
 # INFO:
 # Collects various information about the system and displays the info on the screen
 #
 import time
+import os
+import signal
 import logging.config
 import systemwatcher
 import oledmanager
@@ -25,8 +27,14 @@ import paho.mqtt.client as paho
 import RPi.GPIO as GPIO
 
 
+def script_home_path():
+    return os.path.dirname(os.path.realpath(__file__))
+
+def path_join(filename, basedir=script_home_path()):
+    return os.path.join(basedir, filename)
+
 # CONSTANTS
-LOGGING_CONFIG_FILE = "logging_config.ini"
+LOGGING_CONFIG_FILE = path_join("logging_config.ini")
 MQTT_SUBSCRIBE_TOPIC = "home/basement/serverroom/motionsensor"
 MQTT_BROKER = ("192.168.1.170", 1883, 60)  # (host, port, timeout)
 REFRESH_INTERVAL = 2  # seconds
@@ -53,7 +61,7 @@ try:
 
         # Init OLED-screen and show splash image.
         global oled_screen
-        oled_screen = oledmanager.OledManager(5, ["icons/rpi_bw_mono.bmp", "icons/rpilogo.bmp"])
+        oled_screen = oledmanager.OledManager(5, [path_join("icons/rpi_bw_mono.bmp"), path_join("icons/rpilogo.bmp")])
 
         # monitor interesting key data about the system.
         # Default monitor state is OFF. (set to ON when "motion" is detected)
@@ -66,10 +74,10 @@ try:
         mqtt_setup()
 
         # Keep alive until we receive a signal.
-		# The signal most likely to be received is SIGTERM, but as for now 
-		# we dont really care wich one it is.
-		# Cleanup will happen in the "FINALLY" block.
-		signal.pause()
+        # The signal most likely to be received is SIGTERM, but as for now
+        # we don't really care which one it is.
+        # Cleanup will happen in the "FINALLY" block.
+        signal.pause()
 
 
     def mqtt_setup():
@@ -144,9 +152,9 @@ finally:
     del mqtt_client
 
     # turn off OLED screen and kill background thread.
-	system_running_led(False)
+    system_running_led(False)
     global oled_screen
     oled_screen.close()
     oled_screen.clear_oled()
-    GPIO.cleanup()  # TODO enable this ensures a clean exit
+    GPIO.cleanup()  # this ensures a clean exit
     logger.info("Done cleaning. Exiting")

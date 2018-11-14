@@ -50,10 +50,10 @@ class Host(object):
         Calculates up-time based on self.boot_time and returns it in a human friendly format
         :return: string
         """
-        return self.friendly_time_delta(self.boot_time)
+        return self.friendly_time_delta(self.boot_time, datetime.datetime.now())
 
     @staticmethod
-    def friendly_time_delta(start, end=datetime.datetime.now()):
+    def friendly_time_delta(start, end):
         up_time = end - start
         years, reminder = divmod(up_time.total_seconds(), 31556926)
         days, reminder = divmod(reminder, 86400)

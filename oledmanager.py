@@ -4,6 +4,7 @@
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+import os
 import logging
 import DEV_Config
 import OLED_Driver
@@ -27,9 +28,9 @@ class OledManager(object):
         self._activate_screen = False
         self.splash_logos = splash_images  # MUST BE mode=gray_scale, size=128x1218px
         self.splash_duration = splash_duration  # seconds
-        self.font_std = ImageFont.load("fonts/courB10.pil")
-        self.font_h1 = ImageFont.load("fonts/courB18.pil")
-        self.font_xl = ImageFont.load("fonts/courB24.pil")
+        self.font_std = ImageFont.load(OledManager.path_join("fonts/courB10.pil"))
+        self.font_h1 = ImageFont.load(OledManager.path_join("fonts/courB18.pil"))
+        self.font_xl = ImageFont.load(OledManager.path_join("fonts/courB24.pil"))
         self.img_host = None  # pre-rendered images
         self.img_network = None
         self.img_cpu = None
@@ -45,6 +46,16 @@ class OledManager(object):
         self._thread.start()
         logger.info("OLEDManager init complete")
 
+    @staticmethod
+    def script_home_path():
+        return os.path.dirname(os.path.realpath(__file__))
+
+    @staticmethod
+    def path_join(filename, basedir=None):
+        if basedir is None:
+            basedir = OledManager.script_home_path()
+        return os.path.join(basedir, filename)
+	
     def _internal_thread_loop(self):
             logger.debug("entering OLED _internal_thread_loop")
             assert threading.current_thread().name == "oled_internal_thread"
@@ -111,8 +122,8 @@ class OledManager(object):
         duration = self.splash_duration / len(images)
         for img in images:
             logger.debug("SPLASH -> " + img)
-            image_plash_logo = Image.open(img)  # TODO activate this line
-            self.OLED.OLED_ShowImage(image_plash_logo, 0, 0)  # TODO activate this line
+            image_plash_logo = Image.open(img)
+            self.OLED.OLED_ShowImage(image_plash_logo, 0, 0)
             time.sleep(duration)
             self.clear_oled()
 
@@ -155,7 +166,7 @@ class OledManager(object):
     def get_cpu_image(self):
         if self.img_cpu is None:
             self.img_cpu = Image.new("L", (128, 128), 0)  # blank black image
-            icon = Image.open('icons/temp.bmp', 'r')
+            icon = Image.open(OledManager.path_join('icons/temp.bmp'), 'r')
             icon_h = icon.size[1]
             h_offset = 0
             if icon_h < 128:
@@ -173,7 +184,7 @@ class OledManager(object):
     def get_disk_image(self):
         if self.img_disk is None:
             self.img_disk = Image.new("L", (128, 128), 0)  # blank black image
-            icon = Image.open('icons/sdcard.bmp', 'r')
+            icon = Image.open(OledManager.path_join('icons/sdcard.bmp'), 'r')
             icon_h = icon.size[1]
             h_offset = 0
             if icon_h < 128:

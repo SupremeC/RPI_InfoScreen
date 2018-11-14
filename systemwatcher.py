@@ -167,7 +167,8 @@ class SystemWatcher(object):
             res = "0.0"
         return res.replace("temp=", "").replace("'C\n", "")
 
-    def internet_connected(self, host="8.8.8.8", port=53):
+    @staticmethod
+    def internet_connected(host="8.8.8.8", port=53):
         """
         Host: 8.8.8.8 (google-public-dns-a.google.com)
         OpenPort: 53/tcp
