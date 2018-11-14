@@ -131,7 +131,7 @@ class SystemWatcher(object):
             #     kwargs = {"old": self.system_info.host.ip, "new": "a new IP"}
             #     self.ValueChanged(**kwargs)
 
-            if len(updates) > 0:
+            if len(updates) > 0 and getattr(t, "do_run", True):
                 logger.debug("values changed, triggering event!")
                 self.ValueChanged(updates)
                 del updates[:]
